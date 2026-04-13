@@ -2,19 +2,13 @@ name: CI-CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    env:
-      ACTIONS_RUNNER_FORCE_NODE_VERSION: 24
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
@@ -23,13 +17,49 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
+
+      - name: Check Node version
+        run: node -v
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ -f package.json ]; then npm install; else echo "No package.json found, skipping"; fi
 
       - name: Run tests
-        run: npm test || echo "No tests"
+        run: |
+          if npm run | grep test; then npm test; else echo "No tests found, skipping"; fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
